@@ -39,7 +39,8 @@ public class TestView extends LinearLayout implements Checkable {
 
     public void setText1(String name,double amount){
         //textView1.setText(name);
-        ctv.setText(name + " " + amount);
+        //change
+        ctv.setText(name + " (" + amount+")");
         //ctv.setChecked(true);
     }
     public void setText2(String foodInfo){

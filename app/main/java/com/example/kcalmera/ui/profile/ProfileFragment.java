@@ -2,6 +2,7 @@ package com.example.kcalmera.ui.profile;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,8 @@ public class ProfileFragment extends Fragment {
 
                 BufferedReader br = null;
                 try {
-                    br = new BufferedReader(new FileReader("/data/data/com.example.kcalmera/files/"+"profile.txt"));
+                    //br = new BufferedReader(new FileReader("/data/data/com.example.kcalmera/files/Documents/"+"profile.txt"));
+                    br = new BufferedReader(new FileReader("/mnt/sdcard/Android/data/com.example.kcalmera/files/Documents/"+"profile.txt"));
                 }
                 catch (Exception e)
                 {
