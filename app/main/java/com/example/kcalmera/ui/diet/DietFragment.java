@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -189,7 +190,8 @@ public class DietFragment extends Fragment {
                             array = str.split("/");
 
                             //list에 추가
-                            items.add(new ItmStr(array[0], Double.parseDouble(array[1]), array[2], Integer.parseInt(array[3]), Double.parseDouble(array2[0]), Double.parseDouble(array2[1]), am*Double.parseDouble(array2[2]), Double.parseDouble(array2[3]), Double.parseDouble(array2[4])));
+
+                            items.add(new ItmStr(array[0], Double.parseDouble(array[1]), array[2], Integer.parseInt(array[3]), Double.parseDouble(array2[0]), Double.parseDouble(array2[1]), Double.parseDouble(array2[2]), Double.parseDouble(array2[3]), Double.parseDouble(array2[4])));
                             //총 영양소 정보 갱신
                             mycal.setText(sum(items));
                             //list view 갱신
@@ -253,7 +255,8 @@ public class DietFragment extends Fragment {
                                     String str = ((MainActivity) MainActivity.mContext).updateRecord(amount, items.get(ch).pmk);
                                     String food_info = ((MainActivity) MainActivity.mContext).selectFoodInfo(items.get(ch).strName);
                                     String[] array2 = food_info.split("/");
-                                    items.set(ch, new ItmStr(items.get(ch).strName, Double.parseDouble(amount), update, items.get(ch).pmk, Double.parseDouble(array2[0]), am*Double.parseDouble(array2[1]), Double.parseDouble(array2[2]), Double.parseDouble(array2[3]), Double.parseDouble(array2[4])));
+
+                                    items.set(ch, new ItmStr(items.get(ch).strName, Double.parseDouble(amount), update, items.get(ch).pmk, Double.parseDouble(array2[0]), Double.parseDouble(array2[1]), Double.parseDouble(array2[2]), Double.parseDouble(array2[3]), Double.parseDouble(array2[4])));
                                     mycal.setText(sum(items));
                                     adapter.notifyDataSetChanged();
                                 }
@@ -329,6 +332,7 @@ public class DietFragment extends Fragment {
                     String[] array = array_set[i].split("/");
                     String food_info = ((MainActivity) MainActivity.mContext).selectFoodInfo(array[0]);
                     String[] array2 = food_info.split("/");
+
                     items.add(new ItmStr(array[0], Double.parseDouble(array[1]), array[2], Integer.parseInt(array[3]),Double.parseDouble(array2[0]),Double.parseDouble(array2[1]),Double.parseDouble(array2[2]),Double.parseDouble(array2[3]),Double.parseDouble(array2[4])));
                 }
                 //총 영양소 갱신
@@ -371,6 +375,7 @@ public class DietFragment extends Fragment {
                             String[] array = array_set[i].split("/");
                             String food_info = ((MainActivity) MainActivity.mContext).selectFoodInfo(array[0]);
                             String[] array2 = food_info.split("/");
+
                             items.add(new ItmStr(array[0], Double.parseDouble(array[1]), array[2], Integer.parseInt(array[3]),Double.parseDouble(array2[0]),Double.parseDouble(array2[1]),Double.parseDouble(array2[2]),Double.parseDouble(array2[3]),Double.parseDouble(array2[4])));
                         }
                             //items.add(array_set[i]);
@@ -388,6 +393,32 @@ public class DietFragment extends Fragment {
         });
 
 
+        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
+
+                Log.v("long clicked","pos: " + pos);
+
+                //간이창을 띄움
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.mContext);
+                //alert.setTitle("영양 정보");
+                final FoodInfoView foodInfoView = new FoodInfoView(MainActivity.mContext);
+                foodInfoView.setText1(items.get(pos).strName);
+                foodInfoView.setText2(((MainActivity) MainActivity.mContext).selectFoodInfo2(items.get(pos).strName ));
+                alert.setView(foodInfoView);
+
+                alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                    }
+                });
+
+                alert.show();
+                return true;
+            }
+        });
 
         return root;
     }
@@ -437,7 +468,8 @@ class testAdapter extends BaseAdapter {
         //item 음식 이름 양
         tView.setText1(item.strName, item.amount);
         //item 그램 칼로리 탄 단 지
-        tView.setText2(String.format("%.2f %.2f %.2f %.2f %.2f",item.amount*item.gram,item.amount*item.kcal,item.amount*item.carbohydrate,item.amount*item.protein,item.amount*item.fat));
+        // change
+        tView.setText2(String.format("    1회 제공량: %.1fg               열량: %.1fkcal\n    탄: %.1fg 단: %.1fg 지: %.1fg",item.amount*item.gram,item.amount*item.kcal,item.amount*item.carbohydrate,item.amount*item.protein,item.amount*item.fat));
         return tView;
     }
 }
